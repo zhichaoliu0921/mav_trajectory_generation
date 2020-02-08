@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zhichao/catkin_ws/src/mav_trajectory_generation/mav_trajectory_generation_example/cmake-build-debug/devel/setup.sh
