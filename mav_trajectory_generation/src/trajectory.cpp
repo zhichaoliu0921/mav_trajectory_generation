@@ -63,8 +63,9 @@ Eigen::VectorXd Trajectory::evaluate(double t, int derivative_order) const {
     }
   }
   if (t > accumulated_time) {
-    LOG(ERROR) << "Time out of range of the trajectory!";
-    return Eigen::VectorXd::Zero(D(), 1);
+    //LOG(ERROR) << "Time out of range of the trajectory!";
+    //return Eigen::VectorXd::Zero(D(), 1);
+      t = accumulated_time;
   }
 
   // Make sure we don't go off the end of the segments (can happen if t is

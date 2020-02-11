@@ -22,12 +22,12 @@ int main(int argc, char **argv) {
     middle.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, Eigen::Vector3d(2,2,0));
     vertices.push_back(middle);
 
-    end.makeStartOrEnd(Eigen::Vector3d(2,2,2), derivative_to_optimize);
+    end.makeStartOrEnd(Eigen::Vector3d(2,1,2), derivative_to_optimize);
     vertices.push_back(end);
 
     std::vector<double> segment_times;
-    const double v_max = 20.0;
-    const double a_max = 20.0;
+    const double v_max = 10.0;
+    const double a_max = 10.0;
     segment_times = estimateSegmentTimes(vertices, v_max, a_max);
 
     const int N = 8;
@@ -43,15 +43,16 @@ int main(int argc, char **argv) {
     opt.getTrajectory(&trajectory);
 
     // Single sample:
-    double sampling_time = 2.0;
+    double sampling_time = 4.0;
     int derivative_order = mav_trajectory_generation::derivative_order::POSITION;
     int velocity_order = mav_trajectory_generation::derivative_order::VELOCITY;
     int acc_order = mav_trajectory_generation::derivative_order::ACCELERATION;
     Eigen::VectorXd sample = trajectory.evaluate(sampling_time, derivative_order);
-    //std::cout << "sample =" <<sample << std::endl;
-// Sample range:
+    std::cout << "sample =" <<sample << std::endl;
+
+    // Sample range:
     double t_start = 0.0;
-    double t_end = 2.0;
+    double t_end = 6.0;
     double dt = 0.01;
     std::vector<Eigen::VectorXd> result;
     std::vector<double> sampling_times; // Optional.
@@ -76,8 +77,9 @@ int main(int argc, char **argv) {
     }
 
 
-    Eigen::VectorXd t(100);
-    t.setLinSpaced(result.size(), t_start, t_end);
+    //Eigen::VectorXd t(100);
+    //t.setLinSpaced(result.size(), t_start, t_end);
+    std::vector<double> t = sampling_times;
     plotty::figure();
     plotty::subplot(3, 1, 1);
     plotty::plot(t, mat.row(0));
