@@ -12,17 +12,17 @@ int main(int argc, char **argv) {
 
     mav_trajectory_generation::Vertex::Vector vertices;
     const int dimension = 3;
-    const int derivative_to_optimize = mav_trajectory_generation::derivative_order::JERK;
-    mav_trajectory_generation::Vertex start(dimension), middle(dimension), end(dimension);
-
-    start.makeStartOrEnd(Eigen::Vector3d(0,0,1), derivative_to_optimize);
+    const int derivative_to_optimize = mav_trajectory_generation::derivative_order::SNAP;
+    //mav_trajectory_generation::Vertex start(dimension), middle(dimension), end(dimension);
+    mav_trajectory_generation::Vertex start(dimension), end(dimension);
+    start.makeStartOrEnd(Eigen::Vector3d(0,0,2), derivative_to_optimize);
     vertices.push_back(start);
 
-    middle.addConstraint(mav_trajectory_generation::derivative_order::POSITION, Eigen::Vector3d(1,1,1));
-    middle.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, Eigen::Vector3d(2,2,0));
-    vertices.push_back(middle);
+    //middle.addConstraint(mav_trajectory_generation::derivative_order::POSITION, Eigen::Vector3d(1,1,3));
+    //middle.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, Eigen::Vector3d(3,0,1));
+    //vertices.push_back(middle);
 
-    end.makeStartOrEnd(Eigen::Vector3d(2,1,2), derivative_to_optimize);
+    end.makeStartOrEnd(Eigen::Vector3d(5,2,5), derivative_to_optimize);
     vertices.push_back(end);
 
     std::vector<double> segment_times;
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     const double a_max = 10.0;
     segment_times = estimateSegmentTimes(vertices, v_max, a_max);
 
-    const int N = 8;
+    const int N = 10;
     mav_trajectory_generation::PolynomialOptimization<N> opt(dimension);
     opt.setupFromVertices(vertices, segment_times, derivative_to_optimize);
     opt.solveLinear();
